@@ -20,10 +20,36 @@ class App extends Component {
   }
 
   addCartItem = product => {
-    this.setState(prevState => ({cartList: [...prevState.cartList, product]}))
+    const {cartList} = this.state
+    const existingItem = cartList.find(item => item.id === product.id)
+
+    if (existingItem) {
+      // If the item already exists, update its quantity
+      this.setState(prevState => ({
+        cartList: prevState.cartList.map(item => {
+          if (item.id === product.id) {
+            return {...item, quantity: product.quantity}
+          }
+          return item
+        }),
+      }))
+    } else {
+      // If the item doesn't exist, add it to the cart list
+      this.setState(prevState => ({
+        cartList: [...prevState.cartList, {...product, quantity: 1}],
+      }))
+    }
   }
 
-  deleteCartItem = () => {}
+  removeAllItems = () => {
+    this.setState({cartList: []})
+  }
+
+  deleteCartItem = id => {
+    const {cartList} = this.state
+    const updatedCartList = cartList.filter(eachCart => eachCart.id !== id)
+    this.setState({cartList: updatedCartList})
+  }
 
   render() {
     const {cartList} = this.state
@@ -34,6 +60,7 @@ class App extends Component {
             cartList,
             addCartItem: this.addCartItem,
             deleteCartItem: this.deleteCartItem,
+            removeAllItems: this.removeAllItems,
           }}
         >
           <Switch>

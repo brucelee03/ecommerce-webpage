@@ -113,6 +113,7 @@ class ProductItemDetails extends Component {
         const {addCartItem} = value
         const {productData, quantity, similarProductsData} = this.state
         const {
+          id,
           availability,
           brand,
           description,
@@ -124,7 +125,7 @@ class ProductItemDetails extends Component {
         } = productData
 
         const onClickAddButton = () => {
-          addCartItem({...productData, quantity})
+          addCartItem({...productData, quantity, id})
         }
 
         return (
