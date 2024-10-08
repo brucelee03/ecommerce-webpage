@@ -16,7 +16,7 @@ const Cart = () => (
         .reduce((acc, current) => acc + current, 0)
 
       const onRemoveAllItem = () => {
-        removeAllItems()
+        removeAllCartItems()
       }
 
       return (
