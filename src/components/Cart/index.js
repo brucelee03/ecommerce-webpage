@@ -1,28 +1,31 @@
+import CartContext from '../../context/CartContext'
+import EmptyCartView from '../EmptyCartView'
 import Header from '../Header'
 import CartListView from '../CartListView'
-
-import CartContext from '../../context/CartContext'
-import CartSummary from '../CartSummary'
-import EmptyCartView from '../EmptyCartView'
 
 import './index.css'
 
 const Cart = () => (
   <CartContext.Consumer>
     {value => {
-      const {cartList, removeAllCartItems} = value
+      const {cartList, removeAllItems} = value
       const showEmptyView = cartList.length === 0
+      let totalOrderAmount = 0
+      totalOrderAmount = cartList
+        .map(obj => obj.price * obj.quantity)
+        .reduce((acc, current) => acc + current, 0)
+
       const onRemoveAllItem = () => {
-        removeAllCartItems()
+        removeAllItems()
       }
 
       return (
         <>
           <Header />
-          <div className="cart-container">
-            {showEmptyView ? (
-              <EmptyCartView />
-            ) : (
+          {showEmptyView ? (
+            <EmptyCartView />
+          ) : (
+            <div className="cart-container">
               <div className="cart-content-container">
                 <div className="cart-content-header">
                   <h1 className="cart-heading">My Cart</h1>
@@ -35,10 +38,23 @@ const Cart = () => (
                   </button>
                 </div>
                 <CartListView />
-                <CartSummary />
+                <div className="total-order-amount-card">
+                  <h1 className="total-order-amount">
+                    Order Total:{' '}
+                    <span className="order-amount">
+                      Rs {totalOrderAmount}/-
+                    </span>
+                  </h1>
+                  <p className="total-order-items">
+                    {cartList.length} Items in cart
+                  </p>
+                  <button type="button" className="checkout-btn">
+                    Checkout
+                  </button>
+                </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </>
       )
     }}
