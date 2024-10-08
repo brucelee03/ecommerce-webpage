@@ -1,9 +1,11 @@
 import {Component} from 'react'
+import {Link} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import Loader from 'react-loader-spinner'
 import {BsPlusSquare, BsDashSquare} from 'react-icons/bs'
 
 import CartContext from '../../context/CartContext'
+
 import Header from '../Header'
 import SimilarProductItem from '../SimilarProductItem'
 
@@ -77,7 +79,7 @@ class ProductItemDetails extends Component {
   }
 
   renderLoadingView = () => (
-    <div className="products-details-loader-container">
+    <div className="products-details-loader-container" data-testid="loader">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )
@@ -90,9 +92,11 @@ class ProductItemDetails extends Component {
         className="error-view-image"
       />
       <h1 className="product-not-found-heading">Product Not Found</h1>
-      <button type="button" className="button">
-        Continue Shopping
-      </button>
+      <Link to="/products">
+        <button type="button" className="button">
+          Continue Shopping
+        </button>
+      </Link>
     </div>
   )
 
@@ -124,8 +128,8 @@ class ProductItemDetails extends Component {
           totalReviews,
         } = productData
 
-        const onClickAddButton = () => {
-          addCartItem({...productData, quantity, id})
+        const onClickAddToCart = () => {
+          addCartItem({...productData, quantity})
         }
 
         return (
@@ -161,6 +165,7 @@ class ProductItemDetails extends Component {
                     type="button"
                     className="quantity-controller-button"
                     onClick={this.onDecrementQuantity}
+                    data-testid="minus"
                   >
                     <BsDashSquare className="quantity-controller-icon" />
                   </button>
@@ -169,14 +174,15 @@ class ProductItemDetails extends Component {
                     type="button"
                     className="quantity-controller-button"
                     onClick={this.onIncrementQuantity}
+                    data-testid="plus"
                   >
                     <BsPlusSquare className="quantity-controller-icon" />
                   </button>
                 </div>
                 <button
                   type="button"
-                  onClick={onClickAddButton}
                   className="button add-to-cart-btn"
+                  onClick={onClickAddToCart}
                 >
                   ADD TO CART
                 </button>
