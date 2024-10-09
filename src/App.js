@@ -56,6 +56,9 @@ class App extends Component {
     this.setState(prevState => ({
       cartList: prevState.cartList.map(item => {
         if (item.id === id) {
+          if (item.quantity <= 1) {
+            this.removeCartItem(id)
+          }
           return {...item, quantity: item.quantity - 1}
         }
         return item
